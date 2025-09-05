@@ -27,16 +27,26 @@ connectToMongo();
 
 const app = express();
 
-const allowedOrigins = ["http://localhost:5173", "http://localhost:3000"];
+// const allowedOrigins = ["https://bucolic-centaur-4d91a5.netlify.app/", "http://localhost:3000"];
+// app.use(cors({
+//   origin: function (origin, callback) {
+//     if (!origin || allowedOrigins.includes(origin)) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+//   credentials: true,
+// }));
+
+const allowedOrigins = [
+  process.env.FRONTEND_URL, // your deployed frontend
+  "http://localhost:5173"   // local dev
+];
+
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
+  origin: allowedOrigins,
+  credentials: true
 }));
 
 
