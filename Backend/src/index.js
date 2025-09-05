@@ -20,23 +20,29 @@ const { getEsewaPaymentHash, verifyEsewaPayment } = require("./controllers/esewa
 const Payment = require("./models/paymentModel");
 const Item = require("./models/itemModel");
 const PurchasedItem = require("./models/purchasedItemModel");
+const PORT = process.env.PORT || 3001;
 
 dotenv.config();
 connectToMongo();
 
 const app = express();
 
-const allowedOrigins = ["http://localhost:5173", "http://localhost:3000"];
+// const allowedOrigins = ["http://localhost:5173", "http://localhost:3000"];
+// app.use(cors({
+//   origin: function (origin, callback) {
+//     if (!origin || allowedOrigins.includes(origin)) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+//   credentials: true,
+// }));
+
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
+  origin: '*'
 }));
+
 
 app.use(bodyParser.json());
 app.use(express.json({ limit: "10mb" }));
@@ -64,6 +70,10 @@ app.use("/api/users", userRoutes);
 app.use("/api/order", orderRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/payments", paymentRoutes);
+
+app.get('/', (req, res) => {
+  res.send('Backend is running');
+});
 
 app.get("/esewa", (req, res) => {
   res.sendFile(__dirname + "/test.html");
@@ -131,6 +141,6 @@ app.get("/complete-payment", async (req, res) => {
 });
 
 
-app.listen(3001, () => {
+app.listen(PORT, () => {
   console.log("✅ Backend listening at http://localhost:3001");
 });
